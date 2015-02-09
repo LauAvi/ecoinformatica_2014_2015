@@ -1,0 +1,65 @@
+###ESTE ME DA PROBLEMAS Y ME DEJA COLGADA LA CONSOLA, LA SALIDA EN WORD ES MUY MALA
+
+---
+title: "RETO 5_2 ANÁLISIS CLUSTER PARA EL NDVI EN UNA HORA DADA."
+author: "Laura Avivar"
+output: word_document
+---
+
+Se va a realizar un análisis cluster, cuyo objetico es agrupar un conjunto de observaciones en un número dado de grupos. Este agrupamiento, esta basado en la idea de distancia o de similitud entre las observaciones.
+
+Partimos de 3 imagenes que contienen información sobre el NDVI en una hora concreta.
+
+##Establezco mi directorio de trabajo
+setwd("~/ecoinformatica_2014_2015/sesion_3/retos")
+      
+install.packages(c('raster'), dep=T)
+library(raster)
+library(rgdal)
+
+hora <- "12"
+imagenes <- list.files(path="./ndvi", full.names = TRUE, 
+                       pattern=paste("_", hora, "..\\.jpg\\.asc$", sep=""))
+
+##Visulaizamos una de las tres imagenes.
+imagen <- raster(imagenes[[1]])
+plot(imagen)
+
+# Creamos in stack 
+stack_imagenes <-stack(imagenes)
+
+# media por pixel 
+media_pixel <- mean(stack_imagenes)
+
+
+
+##Pre-procesamiento
+hist(media_pixel[])
+
+##Realizo un K-medias, con tres grupos, con un máximo de 200 interacciones, y tres centroides.
+mi_cluster <- kmeans(media_pixel[], 3, iter.max = 200, nstart = 3)
+
+##Creo una imagen con el resultado
+cluster_ndvi <- mi_cluster$cluster
+plot(cluster_ndvi)
+
+library(rgdal)
+library(classInt)
+library(RColorBrewer)
+
+"Spectral"
+plotclr <- rev(brewer.pal(3, "Spectral"))
+
+plot((cluster_ndvi), xlab="Indice", ylab="Cluster", pch=19, col="1=red", main="Análisis Cluster")
+
+```{r}
+summary(cars)
+```
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
